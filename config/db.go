@@ -2,8 +2,11 @@ package config
 
 import (
 	"backend/eventApp/models"
+	"fmt"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -12,17 +15,22 @@ var DB *gorm.DB
 
 func ConnectDB() {
 
+	// Load file .env
+	if err := godotenv.Load(); err != nil {
+		log.Println("File .env tidak ditemukan:", err)
+	}
+
 	// host := os.Getenv("DB_HOST")
-	// user := os.Getenv("DB_USER")
+	user := os.Getenv("DB_USER")
 	// dbName := os.Getenv("DB_NAME")
-	// dbPass := os.Getenv("DB_PASSWORD")
+	dbPass := os.Getenv("DB_PASSWORD")
 	// port := os.Getenv("DB_PORT")
 
 	// if host == "" || user == "" || dbName == "" || port == "" {
 	// 	log.Fatal("Konfigurasi database belum lengkap")
 	// }
 
-	dsn := "postgresql://neondb_owner:npg_mUu9SNEMeFW0@ep-bold-smoke-ao71bs75-pooler.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+	dsn := fmt.Sprintf("postgresql://%s:%s.c-2.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require", user, dbPass)
 
 	// dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=Asia/Makassar", host, user, dbPass, dbName, port)
 
