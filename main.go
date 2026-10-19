@@ -5,6 +5,7 @@ import (
 	"backend/eventApp/controllers"
 	"backend/eventApp/middleware"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,6 +19,8 @@ func main() {
 	// 	})
 	// })
 
+	//atur cors
+	router.Use(cors.Default())
 	//koneksi database
 	config.ConnectDB()
 
