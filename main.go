@@ -4,13 +4,20 @@ import (
 	"backend/eventApp/config"
 	"backend/eventApp/controllers"
 	"backend/eventApp/middleware"
+	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
 	router := gin.Default()
+
+	// Load file .env
+	if err := godotenv.Load(); err != nil {
+		log.Println("File .env tidak ditemukan:", err)
+	}
 
 	// router.GET("/", getEvents)
 	// router.GET("/ping", func(c *gin.Context) {
