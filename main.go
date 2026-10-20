@@ -61,12 +61,46 @@ package main
 // }
 
 import (
-	"backend/eventApp/api"
+	"backend/eventApp/config"
+	"backend/eventApp/controllers"
+	"backend/eventApp/middleware"
 	"log"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	router := api.SetupRouter()
+	router := gin.Default()
+	router.Use(cors.Default())
+
+	// Koneksi database
+	config.ConnectDB()
+
+	api := router.Group("/api")
+
+	// Auth
+	api.POST("/auth/register", controllers.RegisterUser)
+	api.POST("/auth/login", controllers.LoginUser)
+
+	// Events
+	api.GET("/events", controllers.GetAllEvents)
+	api.GET("/events/:id", controllers.GetEventById)
+
+	// Protected routes
+	protected := api.Group("/")
+	protected.Use(middleware.RequiredAuth())
+
+	protected.GET("/auth/me", controllers.GetCurrentUser)
+
+	protected.POST("/events", controllers.CreateEvent)
+	protected.PUT("/events/:id", controllers.UpdateEventById)
+	protected.DELETE("/events/:id", controllers.DeleteEventById)
+
+	// Booking
+	protected.POST("/booking", controllers.CreateBookingEvent)
+	protected.GET("/booking/user", controllers.GetBookingByUser)
+	protected.DELETE("/booking/:id", controllers.DeleteBooking)
 
 	log.Println("Server running on port 8080")
 
