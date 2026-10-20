@@ -90,17 +90,19 @@ func main() {
 	// Protected routes
 	protected := api.Group("/")
 	protected.Use(middleware.RequiredAuth())
+	{
 
-	protected.GET("/auth/me", controllers.GetCurrentUser)
+		protected.GET("/auth/me", controllers.GetCurrentUser)
 
-	protected.POST("/events", controllers.CreateEvent)
-	protected.PUT("/events/:id", controllers.UpdateEventById)
-	protected.DELETE("/events/:id", controllers.DeleteEventById)
+		protected.POST("/events", controllers.CreateEvent)
+		protected.PUT("/events/:id", controllers.UpdateEventById)
+		protected.DELETE("/events/:id", controllers.DeleteEventById)
 
-	// Booking
-	protected.POST("/booking", controllers.CreateBookingEvent)
-	protected.GET("/booking/user", controllers.GetBookingByUser)
-	protected.DELETE("/booking/:id", controllers.DeleteBooking)
+		// Booking
+		protected.POST("/booking", controllers.CreateBookingEvent)
+		protected.GET("/booking/user", controllers.GetBookingByUser)
+		protected.DELETE("/booking/:id", controllers.DeleteBooking)
+	}
 
 	log.Println("Server running on port 8080")
 
